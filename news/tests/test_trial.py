@@ -8,7 +8,7 @@ from news.models import News
 
 
 # Создаём тестовый класс с произвольным названием, наследуем его от TestCase.
-@skip()
+@unittest.skip("something")
 class TestNews(TestCase):
 
     # Все нужные переменные сохраняем в атрибуты класса.
