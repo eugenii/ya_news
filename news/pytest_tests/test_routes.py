@@ -6,6 +6,8 @@ import pytest
 
 from news.models import Comment, News
 
+pytestmark = pytest.mark.django_db
+
 
 @pytest.mark.parametrize(
     'name',  # Имя параметра функции.
