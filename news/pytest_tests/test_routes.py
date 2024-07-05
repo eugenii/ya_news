@@ -40,13 +40,13 @@ def test_pages_availability_for_anonymous_user(client, name):
 #     assert note.title == 'Заголовок'
 
 
-# # Обозначаем, что тесту нужен доступ к БД. 
-# # Без этой метки тест выдаст ошибку доступа к БД.
-# @pytest.mark.django_db
-# def test_empty_db():
-#     notes_count = Note.objects.count()
-#     # В пустой БД никаких заметок не будет:
-#     assert notes_count == 0 
+# Обозначаем, что тесту нужен доступ к БД. 
+# Без этой метки тест выдаст ошибку доступа к БД.
+@pytest.mark.django_db
+def test_empty_db():
+    news_count = News.objects.count()
+    # В пустой БД никаких заметок не будет:
+    assert news_count == 0 
 
 # @pytest.mark.parametrize(
 #     'parametrized_client, expected_status',
@@ -68,22 +68,22 @@ def test_pages_availability_for_anonymous_user(client, name):
 #     response = parametrized_client.get(url)
 #     assert response.status_code == expected_status
 
-# @pytest.mark.parametrize(
-#     'name, args',
-#     (
-#         ('news:detail', pytest.lazy_fixture('id_for_args')),
-#         ('news:edit', pytest.lazy_fixture('id_for_args')),
-#         ('news:delete', pytest.lazy_fixture('id_for_args')),
-#         # ('notes:add', None),
-#         # ('notes:success', None),
-#         # ('notes:list', None),
-#     ),
-# )
-# # Передаём в тест анонимный клиент, name проверяемых страниц и args:
-# def test_redirects(client, name, args):
-#     login_url = reverse('users:login')
-#     # Теперь не надо писать никаких if и можно обойтись одним выражением.
-#     url = reverse(name, args=args)
-#     expected_url = f'{login_url}?next={url}'
-#     response = client.get(url)
-#     assertRedirects(response, expected_url)
+@pytest.mark.parametrize(
+    'name, args',
+    (
+        ('news:detail', pytest.lazy_fixture('id_for_args')),
+        ('news:edit', pytest.lazy_fixture('id_for_args')),
+        ('news:delete', pytest.lazy_fixture('id_for_args')),
+        # ('notes:add', None),
+        # ('notes:success', None),
+        # ('notes:list', None),
+    ),
+)
+# Передаём в тест анонимный клиент, name проверяемых страниц и args:
+def test_redirects(client, name, args):
+    login_url = reverse('users:login')
+    # Теперь не надо писать никаких if и можно обойтись одним выражением.
+    url = reverse(name, args=args)
+    expected_url = f'{login_url}?next={url}'
+    response = client.get(url)
+    assertRedirects(response, expected_url)
