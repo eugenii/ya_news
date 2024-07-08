@@ -40,13 +40,13 @@ def news(author):
     news = News.objects.create(  # Создаём объект новости.
         title='Заголовок',
         text='Текст новости',
-        date=datetime.datetime.today
+        # date=datetime.datetime.today,
     )
     return news
 
 @pytest.fixture
-def comment(author):
-    comment = Comment.objects.create(  # Создаём объект новости.
+def comment(author, news):
+    comment = Comment.objects.create(  # Создаём объект комментария.
         author=author,
         news=news,
         text='Комментарий',
@@ -56,7 +56,6 @@ def comment(author):
 
 @pytest.fixture
 # Фикстура запрашивает другую фикстуру создания новости.
-def id_for_args(news):  
-    # И возвращает кортеж, который содержит id новости.
-    # На то, что это кортеж, указывает запятая в конце выражения.
-    return (news.id,)
+def id_for_args(comment):  
+    # И возвращает кортеж, который содержит id комментария.
+    return (comment.id,)
