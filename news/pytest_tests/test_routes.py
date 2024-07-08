@@ -56,24 +56,20 @@ def test_redirects(client, name, args):
     assertRedirects(response, expected_url)
 
 
-# # ====================================================================================
-# @pytest.mark.django_db
-# @pytest.mark.parametrize(
-#     'name, args',
-#     (
-#         ('news:edit', pytest.lazy_fixture('id_for_args')),
-#         ('news:delete', pytest.lazy_fixture('id_for_args')),
-#     ),
-# )
-# def test_foreign_pages_to_edit_delete_for_author(author_client, not_author, name, args):
-#     # comm = comment(not_author, news)
-#     url = reverse(name, args=args)
-#     response = author_client.get(url)
-#     assert response.status_code == HTTPStatus.NOT_FOUND
-
-
-#     # ============================
-#     @pytest.fixture 
-#     def comment(): 
-#         return Comment.objects.create(text="Комментарий", user=user)
-# # Тест проверяет доступность страницы def test_comment_id(comment): ids = comment.id assert ids == 1
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    'name, args',
+    (
+        ('news:edit', pytest.lazy_fixture('id_for_args')),
+        ('news:delete', pytest.lazy_fixture('id_for_args')),
+    ),
+)
+def test_foreign_pages_to_edit_delete_for_author(author_client, not_author, name, args, news, comment):
+    comment = Comment.objects.create(  # Создаём объект комментария.
+        author=not_author,
+        news=news,
+        text='Комментарий',
+    )
+    url = reverse(name, args=(comment.id,))
+    response = author_client.get(url)
+    assert response.status_code == HTTPStatus.NOT_FOUND
